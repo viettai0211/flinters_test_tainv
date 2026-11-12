@@ -199,16 +199,16 @@ public final class CampaignStats {
 
 ## Success Criteria
 
-- [ ] `mvn clean package` produces `target/aggregator.jar`, and `mvn test` passes.
-- [ ] Running on the real 1GB file writes `results/top10_ctr.csv` and `results/top10_cpa.csv`. Both have the exact header and column order shown above, and at most 10 rows each.
-- [ ] Totals match an independent reference aggregation exactly. CTR has 4 decimals, CPA and spend have 2.
-- [ ] The CPA list contains no campaign with zero conversions.
-- [ ] Peak heap stays small and flat: the program completes with `-Xmx64m`.
-- [ ] Processing the 1GB file takes ≤ 15s wall time on the dev machine (target, to be confirmed by benchmark).
-- [ ] Malformed rows are skipped and reported, never crash the run, and the skipped count is printed.
-- [ ] The Dockerfile builds and runs end-to-end and produces the same output.
-- [ ] `benchmarks/` contains at least one log with wall time and peak memory.
-- [ ] The README covers setup, running, libraries, processing time, peak memory, and the non-obvious decisions (fixed-point spend, tie-break, null handling, single-pass design).
+- [x] `mvn clean package` produces `target/aggregator.jar`, and `mvn test` passes (67 tests, also verified from a clean clone).
+- [x] Running on the real 1GB file writes `results/top10_ctr.csv` and `results/top10_cpa.csv`. Both have the exact header and column order shown above, and at most 10 rows each.
+- [x] Totals match an independent reference aggregation exactly (`scripts/reference.awk`). CTR has 4 decimals, CPA and spend have 2.
+- [x] The CPA list contains no campaign with zero conversions (the dataset has none).
+- [x] Peak heap stays small and flat: the program completes with `-Xmx64m` (~42 MiB peak heap).
+- [x] Processing the 1GB file takes ≤ 15s wall time on the dev machine (7.2–9.3 s).
+- [x] Malformed rows are skipped and reported, never crash the run, and the skipped count is printed.
+- [ ] The Dockerfile builds and runs end-to-end and produces the same output. **Not verified:** Docker isn't installed on the dev machine. The README says so.
+- [x] `benchmarks/` contains at least one log with wall time and peak memory.
+- [x] The README covers setup, running, libraries, processing time, peak memory, and the non-obvious decisions (fixed-point spend, tie-break, null handling, single-pass design).
 
 ## Open Questions
 

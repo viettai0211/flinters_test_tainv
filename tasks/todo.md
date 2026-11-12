@@ -178,7 +178,7 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 
 **Acceptance criteria:**
 - [x] The Dockerfile follows the spec's Commands section
-- [ ] The README says clearly that the image was not built or verified here (no Docker on the dev machine). Done in Task 10.
+- [x] The README says clearly that the image was not built or verified here (no Docker on the dev machine). Done in Task 10.
 
 **Verification:**
 - [x] Manual review only (Docker isn't installed)
@@ -200,17 +200,17 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 - how to run the tests
 
 **Acceptance criteria:**
-- [ ] Every item the challenge requires in the README is present
-- [ ] The numbers match the committed benchmark log
+- [x] Every item the challenge requires in the README is present
+- [x] The numbers match the committed benchmark log
 
 **Verification:**
-- [ ] Manual: follow the README from a clean clone; the commands work as written
+- [x] Manual: follow the README from a clean clone; the commands work as written (build, 67 tests, fixture run, `--help`)
 
 **Dependencies:** Tasks 8, 9
 **Files:** `README.md`
 **Scope:** S
 
 ### ✅ Checkpoint D: Complete
-- [ ] Every item in the spec's Success Criteria is ticked
-- [ ] `PROMPTS.md` was left untouched by the agent
+- [ ] Every item in the spec's Success Criteria is ticked. All except the Docker build and run, which can't be checked without Docker.
+- [x] `PROMPTS.md` was left untouched by the agent
 - [ ] Human review before submission

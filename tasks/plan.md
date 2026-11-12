@@ -65,7 +65,7 @@ pom.xml
 - [x] Task 7: Check results against an independent calculation, commit `results/`
 - [x] Task 8: Benchmark script and logs (time and peak memory, `-Xmx64m`)
 - [x] Task 9: Dockerfile
-- [ ] Task 10: README
+- [x] Task 10: README
 
 ### Checkpoint D: Complete
 - [ ] Every item in the spec's Success Criteria is ticked
