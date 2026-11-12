@@ -177,14 +177,15 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 **Description:** A multi-stage build: `maven:3.9-eclipse-temurin-21` builds the jar, and `eclipse-temurin:21-jre` runs it with `ENTRYPOINT ["java","-jar","/app/aggregator.jar"]`. Add a `.dockerignore` that excludes the CSV, zip, `target/` and `requirement/`.
 
 **Acceptance criteria:**
-- [ ] The Dockerfile follows the spec's Commands section
-- [ ] The README says clearly that the image was not built or verified here (no Docker on the dev machine)
+- [x] The Dockerfile follows the spec's Commands section
+- [ ] The README says clearly that the image was not built or verified here (no Docker on the dev machine). Done in Task 10.
 
 **Verification:**
-- [ ] Manual review only (Docker isn't installed)
+- [x] Manual review only (Docker isn't installed)
 
 **Dependencies:** Task 7
 **Files:** `Dockerfile`, `.dockerignore`
+**Notes:** The entrypoint runs with `-Xmx64m`, the same heap cap as the benchmark. The default `CMD` is `--help`. Tests run during the image build.
 **Scope:** S
 
 ---

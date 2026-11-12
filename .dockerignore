@@ -1,0 +1,9 @@
+.git
+.idea
+target
+requirement
+results
+benchmarks
+data
+*.zip
+/ad_data.csv
