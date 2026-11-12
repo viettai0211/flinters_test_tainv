@@ -19,12 +19,12 @@ Work happens in thin slices:
 - **Hand-rolled line splitting**: no regex and no `String.split`. This is the main way to save CPU time. Building a substring for each field is acceptable as a first version. Only optimise further if the first real run misses 15 seconds.
 - **Full sort, not a heap**: there are only about 50 campaigns, so sorting is simpler and the extra cost is negligible.
 - **Exit codes**: `Main` is the only class that maps exceptions to exit codes (0/1/2/3). The other classes throw typed exceptions and never call `System.exit`. This keeps them testable.
-- **No runtime dependencies**: JUnit 5 for tests only. Commit the Maven Wrapper (`mvnw`) so the build doesn't need a globally installed Maven.
+- **No runtime dependencies**: JUnit 5 for tests only. Build with the system `mvn` (3.8+). The Maven Wrapper was dropped because its plugin was not cached and the wrapper downloads Maven at runtime anyway.
 
 ## Dependency Graph
 
 ```
-pom.xml + mvnw
+pom.xml
    └── CliArgs ──────────────────────────────┐
    └── CsvRowParser ─┐                       │
        CampaignStats ┴─ CampaignAggregator ─┐│
@@ -40,7 +40,7 @@ pom.xml + mvnw
 ## Task List
 
 ### Phase 1: Working end-to-end path
-- [ ] Task 1: Maven project skeleton + CLI argument handling
+- [x] Task 1: Maven project skeleton + CLI argument handling
 - [ ] Task 2: Parse rows and add them up per campaign
 - [ ] Task 3: Rank campaigns, write the reports, connect it all in `Main`
 
@@ -75,7 +75,7 @@ pom.xml + mvnw
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| JDK 21 / Maven not installed on the dev machine | High | Task 1 checks with `java -version`. If it's missing, ask the human to install it or build through Docker. Commit `mvnw` regardless. |
+| JDK 21 / Maven not installed on the dev machine | High | Task 1 checks with `java -version`. If it's missing, ask the human to install it or build through Docker. Resolved: JDK 21 installed; set `JAVA_HOME` to it when running Maven. |
 | The 1GB run misses the 15s target | Med | Task 4 measures early. If it's slow, first parse numbers straight from the line text without building substrings, then try a larger buffer. Parallel processing needs the human's approval (spec: Ask first). |
 | Rounding or format differs from what reviewers expect | High | Pin exact formatting in `ReportWriter` tests, including halfway rounding cases. Compare against an independent calculation (Task 7). |
 | Floating-point drift in spend totals | High | Micro-dollar `long` totals; spec forbids `double` totals. |

@@ -8,20 +8,20 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 ## Phase 1: Working end-to-end path
 
 ### Task 1: Maven project skeleton + CLI argument handling
-**Description:** Create the Maven project (Java 21, JUnit 5, executable jar named `aggregator.jar`) and the Maven Wrapper. Add `CliArgs`, which parses `--input`, `--output` and `--help`. Add a minimal `Main` that validates the arguments and exits 1 on bad usage or 2 when the input file is missing.
+**Description:** Create the Maven project (Java 21, JUnit 5, executable jar named `aggregator.jar`) . The Maven Wrapper was dropped: its plugin is not cached and `mvnw` downloads Maven at runtime, so the build uses `mvn` directly. Add `CliArgs`, which parses `--input`, `--output` and `--help`. Add a minimal `Main` that validates the arguments and exits 1 on bad usage or 2 when the input file is missing.
 
 **Acceptance criteria:**
-- [ ] `mvn clean package` produces `target/aggregator.jar`
-- [ ] Missing or unknown flags print the usage text and exit 1. `--help` prints the usage text and exits 0.
-- [ ] A missing input file prints a message to stderr and exits 2
+- [x] `mvn clean package` produces `target/aggregator.jar`
+- [x] Missing or unknown flags print the usage text and exit 1. `--help` prints the usage text and exits 0.
+- [x] A missing input file prints a message to stderr and exits 2
 
 **Verification:**
-- [ ] `mvn test` passes (`CliArgsTest`)
-- [ ] Manual: `java -jar target/aggregator.jar` exits 1; `--input nope.csv --output out` exits 2
+- [x] `mvn test` passes (`CliArgsTest`)
+- [x] Manual: `java -jar target/aggregator.jar` exits 1; `--input nope.csv --output out` exits 2
 
 **Dependencies:** None
-**Files:** `pom.xml`, `mvnw`, `mvnw.cmd`, `.mvn/wrapper/*`, `.gitignore` (also ignores `.idea/` and `requirement/`, per the user), `Main.java`, `CliArgs.java`, `CliArgsTest.java`
-**Precondition:** `java -version` reports 21 (the user is installing it)
+**Files:** `pom.xml`, `.gitignore` (also ignores `.idea/` and `requirement/`, per the user), `.gitattributes`, `Main.java`, `CliArgs.java`, `UsageException.java`, `CliArgsTest.java`, `MainTest.java`
+**Precondition:** `java -version` reports 21 (set `JAVA_HOME` to the JDK 21 folder)
 **Scope:** M
 
 ---
@@ -189,7 +189,7 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 
 ### Task 10: README
 **Description:** Rewrite `README.md` to cover:
-- setup (JDK 21 / mvnw / Docker)
+- setup (JDK 21, Maven 3.8+, Docker)
 - how to run
 - libraries used
 - processing time and peak memory (taken from the Task 8 logs)

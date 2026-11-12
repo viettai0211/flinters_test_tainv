@@ -4,7 +4,7 @@ Source requirement: `requirement/recruitment/fv-sec-001-software-engineer-challe
 
 ## Assumptions
 
-1. **Java 21 (LTS) + Maven 3.9.** No runtime dependencies; JUnit 5 for tests only.
+1. **Java 21 (LTS) + Maven 3.8+.** No runtime dependencies; JUnit 5 for tests only.
 2. **The input matches the published schema and has a header row**: `campaign_id,date,impressions,clicks,spend,conversions`. Fields are not quoted and contain no commas. If a quoted field does show up, the row is treated as malformed and skipped (see Error Handling).
 3. **`spend` is summed exactly using fixed-point arithmetic**: a `long` in micro-dollars (×10⁶), never `double`. This keeps totals exact, because the README says results must "match expected values precisely". Overflow headroom: about 27M rows × $10⁴ × 10⁶ ≈ 2.7×10¹⁷, well below `Long.MAX_VALUE` (9.2×10¹⁸).
 4. **Output formatting**:
@@ -48,7 +48,7 @@ CMP042,125000,6250,12500.50,625,0.0500,20.00
 
 ## Tech Stack
 
-- Java 21, Maven 3.9 (`maven-jar-plugin` builds an executable jar)
+- Java 21, Maven 3.8+ (`maven-jar-plugin` builds the executable jar `target/aggregator.jar`)
 - JUnit 5 (test scope only)
 - Docker: a multi-stage build, with `maven:3.9-eclipse-temurin-21` for building and `eclipse-temurin:21-jre` for running
 
@@ -212,7 +212,7 @@ public final class CampaignStats {
 
 ## Open Questions
 
-1. Are JDK 21 and Maven installed on this machine, or should the build rely on Docker / the Maven Wrapper (`mvnw`)? I propose committing `mvnw` either way.
+1. ~~Is the Maven Wrapper needed?~~ **Resolved:** no `mvnw`. Build with the system Maven 3.8+ and `JAVA_HOME` pointing to JDK 21.
 2. Is a 15s target for the 1GB file acceptable, or do you have a different bar?
 3. ~~Where should `results/` live?~~ **Resolved:** at the repo root.
 4. ~~How should peak memory be measured?~~ **Resolved (2026-11-12):** Docker isn't installed on the dev machine.
