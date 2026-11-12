@@ -146,14 +146,14 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 **Description:** Re-run on the real file, then compare the totals for every campaign in both output files against an independent calculation. The method is `awk`, or a separate JShell script if `awk` is declined, and it needs the human's OK because it scans the 1GB file. Commit `results/top10_ctr.csv` and `results/top10_cpa.csv`.
 
 **Acceptance criteria:**
-- [ ] Every total, CTR and CPA in both files matches the reference after rounding
-- [ ] No campaign with zero conversions appears in `top10_cpa.csv`
+- [x] Every total, CTR and CPA in both files matches the reference after rounding
+- [x] No campaign with zero conversions appears in `top10_cpa.csv` (none exist in the dataset)
 
 **Verification:**
-- [ ] Manual: a diff of the reference output against `results/` is empty
+- [x] Manual: a diff of the reference output against `results/` is empty (both files identical; awk run took 1m10s)
 
 **Dependencies:** Checkpoint C
-**Files:** `results/top10_ctr.csv`, `results/top10_cpa.csv`
+**Files:** `results/top10_ctr.csv`, `results/top10_cpa.csv`, `scripts/reference.awk` (kept so the cross-check can be reproduced)
 **Scope:** S
 
 ---
