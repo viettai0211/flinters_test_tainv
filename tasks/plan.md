@@ -49,10 +49,10 @@ pom.xml
 - [x] `java -jar target/aggregator.jar --input <fixture> --output <tmp>` writes both files, matching the expected output byte for byte
 
 ### Phase 2: Real-data baseline (find out about speed early)
-- [ ] Task 4: First run on the 1GB file and a timing baseline
+- [x] Task 4: First run on the 1GB file and a timing baseline
 
 ### Checkpoint B: Real data
-- [ ] The run finishes, timing is recorded, any speed fix is agreed with the human before continuing
+- [x] The run finishes, timing is recorded, any speed fix is agreed with the human before continuing
 
 ### Phase 3: Robustness
 - [ ] Task 5: Row validation and skipped-row reporting

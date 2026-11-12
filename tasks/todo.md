@@ -71,19 +71,19 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 **Description:** Run the jar on the real `ad_data.csv` with `-Xmx64m` and record the time and summary. If the run takes longer than 15s, apply the parsing fix agreed in plan.md (parse numbers straight from the line text) and re-measure. Do not add parallel processing without approval.
 
 **Acceptance criteria:**
-- [ ] The run finishes with `-Xmx64m` and writes both files
-- [ ] Rows read, rows skipped, campaign count and wall time are written down in `benchmarks/baseline-notes.md`
-- [ ] Either the time is ≤ 15s, or the shortfall and the proposed fix are reported to the human
+- [x] The run finishes with `-Xmx64m` and writes both files
+- [x] Rows read, rows skipped, campaign count and wall time are written down in `benchmarks/baseline-notes.md`
+- [x] Either the time is ≤ 15s, or the shortfall and the proposed fix are reported to the human (4.9–7.0 s, no fix needed)
 
 **Verification:**
-- [ ] Manual: `java -Xmx64m -jar target/aggregator.jar --input requirement/recruitment/fv-sec-001-software-engineer-challenge/ad_data.csv --output results/`
+- [x] Manual (output to a temp dir; `results/` is committed in Task 7): `java -Xmx64m -jar target/aggregator.jar --input requirement/recruitment/fv-sec-001-software-engineer-challenge/ad_data.csv --output results/`
 
 **Dependencies:** Task 3
 **Files:** `benchmarks/baseline-notes.md` (and `CsvRowParser.java` if optimised)
 **Scope:** S
 
 ### ✅ Checkpoint B: Real data
-- [ ] Timing is acceptable, or a fix is agreed with the human
+- [x] Timing is acceptable, or a fix is agreed with the human
 
 ---
 
