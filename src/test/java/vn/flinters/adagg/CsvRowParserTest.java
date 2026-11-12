@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CsvRowParserTest {
 
@@ -60,9 +61,36 @@ class CsvRowParserTest {
                 () -> parser.parse("CMP001,2025-01-01,12000,300,45.50,12,extra", row));
     }
 
+    @ParameterizedTest(name = "rejects \"{0}\"")
+    @CsvSource(delimiter = '|', value = {
+            "CMP001,2025-01-01,abc,300,45.50,12       | impressions",
+            "CMP001,2025-01-01,-5,300,45.50,12        | impressions",
+            "CMP001,2025-01-01,12000,,45.50,12        | clicks",
+            "CMP001,2025-01-01,12000,3.5,45.50,12     | clicks",
+            "CMP001,2025-01-01,12000,300,-1.00,12     | spend",
+            "CMP001,2025-01-01,12000,300,4.5.0,12     | spend",
+            "CMP001,2025-01-01,12000,300,.,12         | spend",
+            "CMP001,2025-01-01,12000,300,1.1234567,12 | spend",
+            "CMP001,2025-01-01,12000,300,45.50,1e3    | conversions",
+            "',2025-01-01,12000,300,45.50,12'         | campaign_id",
+            "'   ,2025-01-01,12000,300,45.50,12'      | campaign_id",
+            "\"CMP001\",2025-01-01,12000,300,45.50,12 | campaign_id",
+            "CMP001,2025/01/01,12000,300,45.50,12     | date",
+            "CMP001,2025-1-01,12000,300,45.50,12      | date",
+            "CMP001,2025-13-01,12000,300,45.50,12     | date",
+            "CMP001,2025-02-30,12000,300,45.50,12     | date",
+            "CMP001,,12000,300,45.50,12               | date"
+    })
+    void rejectsInvalidFieldWithReasonNamingTheField(String line, String field) {
+        MalformedRowException e = assertThrows(MalformedRowException.class, () -> parser.parse(line, row));
+
+        assertTrue(e.getMessage().contains(field), e.getMessage());
+    }
+
     @Test
-    void rejectsNonNumericImpressions() {
-        assertThrows(MalformedRowException.class,
-                () -> parser.parse("CMP001,2025-01-01,abc,300,45.50,12", row));
+    void acceptsLeapDay() throws Exception {
+        parser.parse("CMP001,2024-02-29,1,1,1.00,1", row);
+
+        assertEquals("CMP001", row.campaignId);
     }
 }

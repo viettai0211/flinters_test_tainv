@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CampaignAggregatorTest {
 
@@ -53,6 +54,42 @@ class CampaignAggregatorTest {
 
         assertEquals(2, results.get("CMP001").conversions());
         assertEquals(2_500_000L, results.get("CMP001").spendMicros());
+    }
+
+    @Test
+    void skipsMalformedRowsAndCountsThem() throws Exception {
+        String csv = HEADER + "\n"
+                + "CMP001,2025-01-01,100,10,1.00,1\n"
+                + "CMP001,2025-01-01,abc,10,1.00,1\n"
+                + "\n"
+                + "CMP001,2025-01-02,100,10,1.00,1\n"
+                + "CMP002,2025-01-02,100,10\n";
+        CampaignAggregator aggregator = new CampaignAggregator();
+
+        aggregator.aggregate(new BufferedReader(new StringReader(csv)));
+
+        assertEquals(1, aggregator.results().size());
+        assertEquals(200, aggregator.results().get("CMP001").impressions());
+        ParseStats stats = aggregator.parseStats();
+        assertEquals(5, stats.rowsRead());
+        assertEquals(3, stats.rowsSkipped());
+        assertEquals(3, stats.samples().size());
+        assertTrue(stats.samples().get(0).startsWith("line 3: "), stats.samples().get(0));
+        assertTrue(stats.samples().get(2).startsWith("line 6: "), stats.samples().get(2));
+    }
+
+    @Test
+    void keepsOnlyFirstFiveSkipSamples() throws Exception {
+        StringBuilder csv = new StringBuilder(HEADER).append('\n');
+        for (int i = 0; i < 8; i++) {
+            csv.append("bad row\n");
+        }
+        CampaignAggregator aggregator = new CampaignAggregator();
+
+        aggregator.aggregate(new BufferedReader(new StringReader(csv.toString())));
+
+        assertEquals(8, aggregator.parseStats().rowsSkipped());
+        assertEquals(ParseStats.MAX_SAMPLES, aggregator.parseStats().samples().size());
     }
 
     @Test

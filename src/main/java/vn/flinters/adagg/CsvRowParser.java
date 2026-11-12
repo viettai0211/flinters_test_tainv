@@ -1,5 +1,8 @@
 package vn.flinters.adagg;
 
+import java.time.Month;
+import java.time.Year;
+
 /**
  * Parses one data line of the ad CSV into a reusable {@link Row}.
  * Numbers are read straight from the line's characters so the hot loop
@@ -10,6 +13,7 @@ final class CsvRowParser {
     static final int FIELD_COUNT = 6;
     private static final int SPEND_SCALE_DIGITS = 6;
     private static final int MAX_LONG_DIGITS = 18;
+    private static final int DATE_LENGTH = 10;
 
     /** Mutable holder reused across lines to avoid one allocation per row. */
     static final class Row {
@@ -24,7 +28,8 @@ final class CsvRowParser {
 
     void parse(String line, Row target) throws MalformedRowException {
         splitFields(line);
-        target.campaignId = line.substring(0, fieldEnds[0]);
+        target.campaignId = requireCampaignId(line);
+        requireDate(line);
         target.impressions = requireCount(line, 2, "impressions");
         target.clicks = requireCount(line, 3, "clicks");
         target.spendMicros = requireSpend(line);
@@ -49,6 +54,33 @@ final class CsvRowParser {
 
     private int fieldStart(int field) {
         return field == 0 ? 0 : fieldEnds[field - 1] + 1;
+    }
+
+    private String requireCampaignId(String line) throws MalformedRowException {
+        String id = line.substring(0, fieldEnds[0]);
+        if (id.isBlank() || id.indexOf('"') >= 0) {
+            throw new MalformedRowException("invalid campaign_id: '" + id + "'");
+        }
+        return id;
+    }
+
+    /** Requires a real calendar date in YYYY-MM-DD form, checked without allocating. */
+    private void requireDate(String line) throws MalformedRowException {
+        int start = fieldStart(1);
+        int end = fieldEnds[1];
+        boolean valid = end - start == DATE_LENGTH
+                && line.charAt(start + 4) == '-'
+                && line.charAt(start + 7) == '-';
+        if (valid) {
+            long year = parseCount(line, start, start + 4);
+            long month = parseCount(line, start + 5, start + 7);
+            long day = parseCount(line, start + 8, end);
+            valid = year >= 0 && month >= 1 && month <= 12
+                    && day >= 1 && day <= Month.of((int) month).length(Year.isLeap(year));
+        }
+        if (!valid) {
+            throw new MalformedRowException("invalid date: '" + field(line, 1) + "'");
+        }
     }
 
     private long requireCount(String line, int field, String name) throws MalformedRowException {

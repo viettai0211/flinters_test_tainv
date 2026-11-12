@@ -70,6 +70,20 @@ class MainTest {
                 Files.readString(outputDir.resolve("top10_cpa.csv")));
     }
 
+    @Test
+    void skipsMalformedRowsAndReportsThem(@TempDir Path tmp) throws Exception {
+        int code = run("--input", fixture("malformed.csv").toString(), "--output", tmp.toString());
+
+        assertEquals(Main.EXIT_OK, code, err.toString(StandardCharsets.UTF_8));
+        assertEquals(Files.readString(fixture("basic_expected_ctr.csv")),
+                Files.readString(tmp.resolve("top10_ctr.csv")));
+        assertEquals(Files.readString(fixture("basic_expected_cpa.csv")),
+                Files.readString(tmp.resolve("top10_cpa.csv")));
+        String summary = err.toString(StandardCharsets.UTF_8);
+        assertTrue(summary.contains("Rows read: 22, skipped: 7"), summary);
+        assertTrue(summary.contains("line 6: invalid impressions"), summary);
+    }
+
     private static Path fixture(String name) throws URISyntaxException {
         return Path.of(MainTest.class.getResource("/fixtures/" + name).toURI());
     }

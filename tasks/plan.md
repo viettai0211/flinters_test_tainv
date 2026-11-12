@@ -55,7 +55,7 @@ pom.xml
 - [x] The run finishes, timing is recorded, any speed fix is agreed with the human before continuing
 
 ### Phase 3: Robustness
-- [ ] Task 5: Row validation and skipped-row reporting
+- [x] Task 5: Row validation and skipped-row reporting
 - [ ] Task 6: Header and file edge cases, output errors, rounding
 
 ### Checkpoint C: Robust

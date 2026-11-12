@@ -54,7 +54,7 @@ public final class Main {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(Files.newInputStream(input), StandardCharsets.UTF_8), READ_BUFFER_CHARS)) {
             aggregator.aggregate(reader);
-        } catch (IOException | MalformedRowException e) {
+        } catch (IOException e) {
             err.println("Error: failed to read " + input + ": " + e.getMessage());
             return EXIT_INPUT_ERROR;
         }
@@ -70,8 +70,16 @@ public final class Main {
         }
 
         long elapsedMillis = (System.nanoTime() - startNanos) / 1_000_000;
-        err.printf("Campaigns: %d, elapsed: %d ms%n", reports.size(), elapsedMillis);
+        printSummary(err, aggregator.parseStats(), reports.size(), elapsedMillis);
         return EXIT_OK;
+    }
+
+    private static void printSummary(PrintStream err, ParseStats stats, int campaigns, long elapsedMillis) {
+        err.printf("Rows read: %d, skipped: %d, campaigns: %d, elapsed: %d ms%n",
+                stats.rowsRead(), stats.rowsSkipped(), campaigns, elapsedMillis);
+        for (String sample : stats.samples()) {
+            err.println("  skipped " + sample);
+        }
     }
 
     private static List<CampaignReport> toReports(Map<String, CampaignStats> stats) {

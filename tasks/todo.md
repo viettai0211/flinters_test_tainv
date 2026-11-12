@@ -100,14 +100,15 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the first 5 samples (line number plus reason), and `Main` prints them to stderr.
 
 **Acceptance criteria:**
-- [ ] Each invalid-row case has a unit test showing it is rejected with a reason
-- [ ] An integration test on `fixtures/malformed.csv` produces the same output as a version of the file with only the valid rows, prints the correct skipped count, and exits 0
+- [x] Each invalid-row case has a unit test showing it is rejected with a reason
+- [x] An integration test on `fixtures/malformed.csv` produces the same output as a version of the file with only the valid rows, prints the correct skipped count, and exits 0
 
 **Verification:**
-- [ ] `mvn test` passes
+- [x] `mvn test` passes (60 tests). The 1GB re-run takes 6.5 s with 0 rows skipped.
 
 **Dependencies:** Task 3
 **Files:** `CsvRowParser.java`, `ParseStats.java`, `CampaignAggregator.java`, `Main.java`, tests + fixture
+**Notes:** Dates must be real calendar dates (`2025-02-30` is rejected). A `campaign_id` containing `"` counts as quoted CSV and is rejected. Blank lines count as skipped rows.
 **Scope:** M
 
 ---
