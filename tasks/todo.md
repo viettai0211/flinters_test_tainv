@@ -11,12 +11,12 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 **Description:** Create the Maven project (Java 21, JUnit 5, executable jar named `aggregator.jar`) and the Maven Wrapper. Add `CliArgs`, which parses `--input`, `--output` and `--help`. Add a minimal `Main` that validates the arguments and exits 1 on bad usage or 2 when the input file is missing.
 
 **Acceptance criteria:**
-- [ ] `./mvnw clean package` produces `target/aggregator.jar`
+- [ ] `mvn clean package` produces `target/aggregator.jar`
 - [ ] Missing or unknown flags print the usage text and exit 1. `--help` prints the usage text and exits 0.
 - [ ] A missing input file prints a message to stderr and exits 2
 
 **Verification:**
-- [ ] `./mvnw test` passes (`CliArgsTest`)
+- [ ] `mvn test` passes (`CliArgsTest`)
 - [ ] Manual: `java -jar target/aggregator.jar` exits 1; `--input nope.csv --output out` exits 2
 
 **Dependencies:** None
@@ -35,7 +35,7 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 - [ ] Both `\n` and `\r\n` line endings are accepted
 
 **Verification:**
-- [ ] `./mvnw test` passes (`CsvRowParserTest`, `CampaignAggregatorTest`)
+- [ ] `mvn test` passes (`CsvRowParserTest`, `CampaignAggregatorTest`)
 
 **Dependencies:** Task 1
 **Files:** `CsvRowParser.java`, `CampaignStats.java`, `CampaignAggregator.java`, matching tests
@@ -52,7 +52,7 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 - [ ] An integration test runs `Main` on `fixtures/basic.csv` (about 15 campaigns) and compares both outputs byte for byte with `fixtures/basic_expected_{ctr,cpa}.csv`
 
 **Verification:**
-- [ ] `./mvnw test` passes
+- [ ] `mvn test` passes
 - [ ] Manual: run the jar on the fixture and inspect the two files
 
 **Dependencies:** Task 2
@@ -60,7 +60,7 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 **Scope:** M
 
 ### ✅ Checkpoint A: Small fixture works end-to-end
-- [ ] `./mvnw clean package` and `./mvnw test` pass
+- [ ] `mvn clean package` and `mvn test` pass
 - [ ] Review with the human
 
 ---
@@ -104,7 +104,7 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 - [ ] An integration test on `fixtures/malformed.csv` produces the same output as a version of the file with only the valid rows, prints the correct skipped count, and exits 0
 
 **Verification:**
-- [ ] `./mvnw test` passes
+- [ ] `mvn test` passes
 
 **Dependencies:** Task 3
 **Files:** `CsvRowParser.java`, `ParseStats.java`, `CampaignAggregator.java`, `Main.java`, tests + fixture
@@ -126,7 +126,7 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 - [ ] `.gitattributes` pins `src/test/resources/**` to LF line endings
 
 **Verification:**
-- [ ] `./mvnw test` passes
+- [ ] `mvn test` passes
 
 **Dependencies:** Task 5
 **Files:** `Main.java`, `CampaignAggregator.java`, `ReportWriter.java`, `MainIntegrationTest.java`, fixtures, `.gitattributes`
