@@ -42,11 +42,11 @@ pom.xml
 ### Phase 1: Working end-to-end path
 - [x] Task 1: Maven project skeleton + CLI argument handling
 - [x] Task 2: Parse rows and add them up per campaign
-- [ ] Task 3: Rank campaigns, write the reports, connect it all in `Main`
+- [x] Task 3: Rank campaigns, write the reports, connect it all in `Main`
 
 ### Checkpoint A: Small fixture works end-to-end
-- [ ] `mvn clean package` and `mvn test` pass
-- [ ] `java -jar target/aggregator.jar --input <fixture> --output <tmp>` writes both files, matching the expected output byte for byte
+- [x] `mvn clean package` and `mvn test` pass
+- [x] `java -jar target/aggregator.jar --input <fixture> --output <tmp>` writes both files, matching the expected output byte for byte
 
 ### Phase 2: Real-data baseline (find out about speed early)
 - [ ] Task 4: First run on the 1GB file and a timing baseline

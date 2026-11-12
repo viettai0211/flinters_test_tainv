@@ -47,21 +47,21 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 **Description:** `CampaignReport` is a record with CTR and CPA, both of which can be null. `Rankings` returns the top N by CTR (highest first) and by CPA (lowest first), excluding campaigns where the metric is null and breaking ties by `campaign_id`. `ReportWriter` writes the CSV with the spec's header and formatting: spend 2 decimals, CTR 4, CPA 2, rounding halves up, and an empty cell when CPA is null. `Main` connects the parts and prints a summary to stderr.
 
 **Acceptance criteria:**
-- [ ] Ordering, tie-break and exclusions are covered by `RankingsTest`, including the case with fewer than 10 campaigns
-- [ ] The exact formatting is tested, including the case where 0.00005 rounds to 0.0001 and the empty CPA cell
-- [ ] An integration test runs `Main` on `fixtures/basic.csv` (about 15 campaigns) and compares both outputs byte for byte with `fixtures/basic_expected_{ctr,cpa}.csv`
+- [x] Ordering, tie-break and exclusions are covered by `RankingsTest`, including the case with fewer than 10 campaigns
+- [x] The exact formatting is tested, including the case where 0.00005 rounds to 0.0001 and the empty CPA cell
+- [x] An integration test runs `Main` on `fixtures/basic.csv` (13 campaigns, 15 rows) and compares both outputs byte for byte with `fixtures/basic_expected_{ctr,cpa}.csv`
 
 **Verification:**
-- [ ] `mvn test` passes
-- [ ] Manual: run the jar on the fixture and inspect the two files
+- [x] `mvn test` passes
+- [x] Manual: run the jar on the fixture and inspect the two files
 
 **Dependencies:** Task 2
-**Files:** `CampaignReport.java`, `Rankings.java`, `ReportWriter.java`, `Main.java`, tests + `src/test/resources/fixtures/basic*.csv`
+**Files:** `CampaignReport.java`, `Rankings.java`, `ReportWriter.java`, `CampaignStats.java` (`toReport`), `Main.java`, tests + `src/test/resources/fixtures/basic*.csv`
 **Scope:** M
 
 ### ✅ Checkpoint A: Small fixture works end-to-end
-- [ ] `mvn clean package` and `mvn test` pass
-- [ ] Review with the human
+- [x] `mvn clean package` and `mvn test` pass (40 tests)
+- [ ] Review with the human (deferred to the end of the autonomous `/build auto` run)
 
 ---
 
