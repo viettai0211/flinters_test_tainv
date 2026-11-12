@@ -123,19 +123,20 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 - zero conversions gives a null CPA
 
 **Acceptance criteria:**
-- [ ] Each case above has an integration test in a temporary directory
-- [ ] `.gitattributes` pins `src/test/resources/**` to LF line endings
+- [x] Each case above has an integration test in a temporary directory (zero impressions/conversions are covered by C13/C02 in `fixtures/basic.csv`)
+- [x] `.gitattributes` pins `src/test/resources/**` to LF line endings (`* text=auto eol=lf` since Task 1)
 
 **Verification:**
-- [ ] `mvn test` passes
+- [x] `mvn test` passes (66 tests)
 
 **Dependencies:** Task 5
-**Files:** `Main.java`, `CampaignAggregator.java`, `ReportWriter.java`, `MainIntegrationTest.java`, fixtures, `.gitattributes`
+**Files:** `Main.java`, `CampaignAggregator.java`, `InvalidHeaderException.java`, `MainTest.java`
+**Notes:** A leading UTF-8 BOM before the header is accepted. An unwritable output is tested by passing an existing file as `--output`.
 **Scope:** M
 
 ### ✅ Checkpoint C: Robust
-- [ ] Every row in the spec's Error Handling table has a passing test
-- [ ] No dead or commented-out code (`git grep -n "^\s*//.*;"` comes back empty)
+- [x] Every row in the spec's Error Handling table has a passing test
+- [x] No dead or commented-out code (`git grep -n "^\s*//.*;"` comes back empty)
 
 ---
 

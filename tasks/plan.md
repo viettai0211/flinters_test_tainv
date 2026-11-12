@@ -56,10 +56,10 @@ pom.xml
 
 ### Phase 3: Robustness
 - [x] Task 5: Row validation and skipped-row reporting
-- [ ] Task 6: Header and file edge cases, output errors, rounding
+- [x] Task 6: Header and file edge cases, output errors, rounding
 
 ### Checkpoint C: Robust
-- [ ] Every case in the spec's Error Handling table has a passing test
+- [x] Every case in the spec's Error Handling table has a passing test
 
 ### Phase 4: Deliverables
 - [ ] Task 7: Check results against an independent calculation, commit `results/`

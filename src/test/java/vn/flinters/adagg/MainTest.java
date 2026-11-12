@@ -11,9 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MainTest {
+
+    private static final String HEADER = "campaign_id,date,impressions,clicks,spend,conversions";
 
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
     private final ByteArrayOutputStream err = new ByteArrayOutputStream();
@@ -82,6 +85,73 @@ class MainTest {
         String summary = err.toString(StandardCharsets.UTF_8);
         assertTrue(summary.contains("Rows read: 22, skipped: 7"), summary);
         assertTrue(summary.contains("line 6: invalid impressions"), summary);
+    }
+
+    @Test
+    void emptyFileExitsWithInputError(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("empty.csv"), "");
+
+        int code = run("--input", input.toString(), "--output", tmp.resolve("out").toString());
+
+        assertEquals(Main.EXIT_INPUT_ERROR, code);
+        assertTrue(err.toString(StandardCharsets.UTF_8).contains("header"));
+    }
+
+    @Test
+    void wrongHeaderExitsWithInputError(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("bad.csv"),
+                "campaign,date,impressions,clicks,spend,conversions\nCMP001,2025-01-01,1,1,1.00,1\n");
+
+        int code = run("--input", input.toString(), "--output", tmp.resolve("out").toString());
+
+        assertEquals(Main.EXIT_INPUT_ERROR, code);
+        assertTrue(err.toString(StandardCharsets.UTF_8).contains("header"));
+        assertFalse(Files.exists(tmp.resolve("out")));
+    }
+
+    @Test
+    void headerWithUtf8BomIsAccepted(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("bom.csv"),
+                "﻿" + HEADER + "\nCMP001,2025-01-01,100,5,1.00,1\n");
+
+        int code = run("--input", input.toString(), "--output", tmp.toString());
+
+        assertEquals(Main.EXIT_OK, code, err.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void headerOnlyFileWritesHeaderOnlyReports(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("header.csv"), HEADER + "\n");
+        Path out = tmp.resolve("out");
+
+        int code = run("--input", input.toString(), "--output", out.toString());
+
+        assertEquals(Main.EXIT_OK, code);
+        assertEquals(ReportWriter.HEADER + "\n", Files.readString(out.resolve(Main.CTR_FILE)));
+        assertEquals(ReportWriter.HEADER + "\n", Files.readString(out.resolve(Main.CPA_FILE)));
+    }
+
+    @Test
+    void lastRowWithoutTrailingNewlineIsCounted(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("no-newline.csv"),
+                HEADER + "\nCMP001,2025-01-01,100,5,1.00,1\nCMP001,2025-01-02,100,5,1.00,1");
+
+        int code = run("--input", input.toString(), "--output", tmp.toString());
+
+        assertEquals(Main.EXIT_OK, code);
+        assertEquals(ReportWriter.HEADER + "\nCMP001,200,10,2.00,2,0.0500,1.00\n",
+                Files.readString(tmp.resolve(Main.CTR_FILE)));
+    }
+
+    @Test
+    void unwritableOutputExitsWithOutputError(@TempDir Path tmp) throws Exception {
+        Path input = Files.writeString(tmp.resolve("in.csv"), HEADER + "\nCMP001,2025-01-01,1,1,1.00,1\n");
+        Path outputIsAFile = Files.writeString(tmp.resolve("not-a-dir"), "x");
+
+        int code = run("--input", input.toString(), "--output", outputIsAFile.toString());
+
+        assertEquals(Main.EXIT_OUTPUT_ERROR, code);
+        assertTrue(err.toString(StandardCharsets.UTF_8).contains("not-a-dir"));
     }
 
     private static Path fixture(String name) throws URISyntaxException {

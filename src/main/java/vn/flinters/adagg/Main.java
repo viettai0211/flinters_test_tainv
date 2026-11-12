@@ -57,6 +57,9 @@ public final class Main {
         } catch (IOException e) {
             err.println("Error: failed to read " + input + ": " + e.getMessage());
             return EXIT_INPUT_ERROR;
+        } catch (InvalidHeaderException e) {
+            err.println("Error: invalid header in " + input + ": " + e.getMessage());
+            return EXIT_INPUT_ERROR;
         }
 
         List<CampaignReport> reports = toReports(aggregator.results());
