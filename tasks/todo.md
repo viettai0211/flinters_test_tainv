@@ -8,7 +8,7 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 ## Phase 1: Working end-to-end path
 
 ### Task 1: Maven project skeleton + CLI argument handling
-**Description:** Create the Maven project (Java 21, JUnit 5, executable jar named `aggregator.jar`) . The Maven Wrapper was dropped: its plugin is not cached and `mvnw` downloads Maven at runtime, so the build uses `mvn` directly. Add `CliArgs`, which parses `--input`, `--output` and `--help`. Add a minimal `Main` that validates the arguments and exits 1 on bad usage or 2 when the input file is missing.
+**Description:** Create the Maven project (Java 21, JUnit 5, executable jar named `aggregator.jar`). The Maven Wrapper was dropped: its plugin is not cached and `mvnw` downloads Maven at runtime, so the build uses `mvn` directly. Add `CliArgs`, which parses `--input`, `--output` and `--help`. Add a minimal `Main` that validates the arguments and exits 1 on bad usage or 2 when the input file is missing.
 
 **Acceptance criteria:**
 - [x] `mvn clean package` produces `target/aggregator.jar`
@@ -30,15 +30,15 @@ Package root: `src/main/java/vn/flinters/adagg/` (tests mirror it under `src/tes
 **Description:** `CsvRowParser` splits a well-formed line into fields without regex and converts `spend` to micro-dollars. `CampaignStats` keeps the running totals. `CampaignAggregator` reads lines from a `BufferedReader`, skips the header, and adds each row to the map.
 
 **Acceptance criteria:**
-- [ ] Spend values such as `45.50`, `0`, `.5` and `12.` convert to the correct micro-dollar values
-- [ ] Aggregating the README's 5-row example gives the right totals for CMP001/002/003
-- [ ] Both `\n` and `\r\n` line endings are accepted
+- [x] Spend values such as `45.50`, `0`, `.5` and `12.` convert to the correct micro-dollar values
+- [x] Aggregating the README's 5-row example gives the right totals for CMP001/002/003
+- [x] Both `\n` and `\r\n` line endings are accepted
 
 **Verification:**
-- [ ] `mvn test` passes (`CsvRowParserTest`, `CampaignAggregatorTest`)
+- [x] `mvn test` passes (`CsvRowParserTest`, `CampaignAggregatorTest`)
 
 **Dependencies:** Task 1
-**Files:** `CsvRowParser.java`, `CampaignStats.java`, `CampaignAggregator.java`, matching tests
+**Files:** `CsvRowParser.java`, `MalformedRowException.java`, `CampaignStats.java`, `CampaignAggregator.java`, matching tests
 **Scope:** M
 
 ---

@@ -41,7 +41,7 @@ pom.xml
 
 ### Phase 1: Working end-to-end path
 - [x] Task 1: Maven project skeleton + CLI argument handling
-- [ ] Task 2: Parse rows and add them up per campaign
+- [x] Task 2: Parse rows and add them up per campaign
 - [ ] Task 3: Rank campaigns, write the reports, connect it all in `Main`
 
 ### Checkpoint A: Small fixture works end-to-end
