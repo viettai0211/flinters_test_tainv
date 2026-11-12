@@ -36,7 +36,7 @@ final class ReportWriter {
                 Long.toString(report.totalClicks()),
                 format(report.totalSpend(), 2),
                 Long.toString(report.totalConversions()),
-                format(report.ctr(), 4),
+                format(report.ctr(), 6),
                 format(report.cpa(), 2));
     }
 
