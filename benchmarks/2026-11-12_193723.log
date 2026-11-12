@@ -1,0 +1,11 @@
+# Ad aggregator benchmark
+date:   2026-11-12T19:37:33+07:00
+input:  requirement/recruitment/fv-sec-001-software-engineer-challenge/ad_data.csv (1043304870 bytes)
+heap:   -Xmx64m
+cpus:   8
+java:   java version "21.0.12.1" 2026-08-18 LTS
+os:     MINGW64_NT-10.0-19045 3.0.7-338.x86_64
+
+run 1: wall 9295 ms (includes JVM startup) | Rows read: 26843544, skipped: 0, campaigns: 50, elapsed: 8990 ms, peak heap: 41.7 MiB
+run 2: wall 7406 ms (includes JVM startup) | Rows read: 26843544, skipped: 0, campaigns: 50, elapsed: 7185 ms, peak heap: 41.8 MiB
+run 3: wall 7206 ms (includes JVM startup) | Rows read: 26843544, skipped: 0, campaigns: 50, elapsed: 6997 ms, peak heap: 41.7 MiB

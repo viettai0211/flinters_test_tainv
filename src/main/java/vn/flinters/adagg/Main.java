@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryType;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /** CLI entry point; the only place that maps failures to exit codes. */
@@ -22,6 +25,7 @@ public final class Main {
     static final String CPA_FILE = "top10_cpa.csv";
     private static final int TOP_N = 10;
     private static final int READ_BUFFER_CHARS = 1 << 20;
+    private static final double BYTES_PER_MIB = 1024.0 * 1024.0;
 
     private Main() {
     }
@@ -78,11 +82,19 @@ public final class Main {
     }
 
     private static void printSummary(PrintStream err, ParseStats stats, int campaigns, long elapsedMillis) {
-        err.printf("Rows read: %d, skipped: %d, campaigns: %d, elapsed: %d ms%n",
-                stats.rowsRead(), stats.rowsSkipped(), campaigns, elapsedMillis);
+        err.printf(Locale.ROOT, "Rows read: %d, skipped: %d, campaigns: %d, elapsed: %d ms, peak heap: %.1f MiB%n",
+                stats.rowsRead(), stats.rowsSkipped(), campaigns, elapsedMillis, peakHeapBytes() / BYTES_PER_MIB);
         for (String sample : stats.samples()) {
             err.println("  skipped " + sample);
         }
+    }
+
+    /** Sum of each heap pool's peak usage: an upper bound on the heap used at any one moment. */
+    private static double peakHeapBytes() {
+        return ManagementFactory.getMemoryPoolMXBeans().stream()
+                .filter(pool -> pool.getType() == MemoryType.HEAP)
+                .mapToLong(pool -> pool.getPeakUsage().getUsed())
+                .sum();
     }
 
     private static List<CampaignReport> toReports(Map<String, CampaignStats> stats) {

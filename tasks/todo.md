@@ -162,13 +162,13 @@ Invalid rows are skipped. `ParseStats` counts the skipped rows and keeps the fir
 **Description:** `scripts/benchmark.sh <csv>` builds the jar, runs it with `-Xmx64m`, and writes the wall time, peak heap and the program summary to `benchmarks/<date>.log`. Docker isn't available, so peak heap is measured inside the JVM (from the memory beans) and printed in the summary on stderr.
 
 **Acceptance criteria:**
-- [ ] At least one committed log contains the wall time and peak memory for the 1GB file
+- [x] At least one committed log contains the wall time and peak memory for the 1GB file (7.2–9.3 s wall, about 42 MiB peak heap)
 
 **Verification:**
-- [ ] Manual: run the script and check the log
+- [x] Manual: run the script and check the log
 
 **Dependencies:** Task 7
-**Files:** `scripts/benchmark.sh`, `benchmarks/*.log`
+**Files:** `scripts/benchmark.sh`, `benchmarks/*.log`, `Main.java` (adds peak heap to the summary), `MainTest.java`
 **Scope:** S
 
 ---

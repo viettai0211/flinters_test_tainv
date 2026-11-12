@@ -88,6 +88,15 @@ class MainTest {
     }
 
     @Test
+    void summaryReportsPeakHeap(@TempDir Path tmp) throws Exception {
+        int code = run("--input", fixture("basic.csv").toString(), "--output", tmp.toString());
+
+        assertEquals(Main.EXIT_OK, code);
+        assertTrue(err.toString(StandardCharsets.UTF_8).matches("(?s).*peak heap: \\d+(\\.\\d)? MiB.*"),
+                err.toString(StandardCharsets.UTF_8));
+    }
+
+    @Test
     void emptyFileExitsWithInputError(@TempDir Path tmp) throws Exception {
         Path input = Files.writeString(tmp.resolve("empty.csv"), "");
 
